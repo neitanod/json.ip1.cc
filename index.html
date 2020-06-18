@@ -1,0 +1,88 @@
+<html>
+    <body style="background-color: #fffdef; color: brown;">
+        <script src="jquery-3.4.1.min.js"></script>
+        <script src="renderjson.js" crossorigin="anonymous"></script>
+        <a onclick="toggle()" class="toggle button">Toggle</a>
+        <div id="contents"></div>
+        <script>
+            console.log(top.location.hash.substr(1));
+            let json_data = null;
+            let show_all = false;
+            $.get(top.location.hash.substr(1)).done(function(data){
+                console.log(data);
+                json_data = data;
+                render(json_data);
+            });
+            function render(json) {
+                renderjson.set_icons('+', '-');
+                let max_level = show_all ? 0 : 3 ;
+                renderjson.set_show_to_level(max_level);
+                renderjson.set_max_string_length(10000);
+                var html = renderjson(JSON.parse(json));
+                document.getElementById("contents").innerHTML = "";
+                document.getElementById("contents").appendChild(html);
+            }
+            function toggle() {
+                show_all = !show_all;
+                render(json_data);
+            }
+        </script>
+        <style>
+            .renderjson a              { text-decoration: none; }
+            .renderjson .disclosure    { color: crimson; font-size: 150%; }
+            .renderjson .syntax        { color: grey; }
+            .renderjson .string        { color: #0055c8; }
+            .renderjson .number        { color: #2c8430; }
+            .renderjson .boolean       { color: #ff3601; }
+            .renderjson .key           { color: #c00000; }
+            .renderjson .keyword       { color: lightgoldenrodyellow; }
+            .renderjson .object.syntax { color: lightseagreen; }
+            .renderjson .array.syntax  { color: lightsalmon; }
+            /* .renderjson .key           { color: #8653a3; } */
+
+            .toggle {
+               color: #fff;
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+            .button {
+                cursor: pointer;
+                -webkit-appearance: button;
+                -webkit-writing-mode: horizontal-tb !important;
+                text-rendering: auto;
+                color: -internal-light-dark-color(buttontext, rgb(170, 170, 170));
+                letter-spacing: normal;
+                word-spacing: normal;
+                text-transform: none;
+                text-indent: 0px;
+                text-shadow: none;
+                display: inline-block;
+                text-align: center;
+                align-items: flex-start;
+                background-color: -internal-light-dark-color(rgb(239, 239, 239), rgb(74, 74, 74));
+                box-sizing: border-box;
+                margin: 0em;
+                font: 400 13.3333px Arial;
+                padding: 1px 6px;
+                border-width: 2px;
+                border-style: outset;
+                border-color: -internal-light-dark-color(rgb(118, 118, 118), rgb(195, 195, 195));
+                border-image: initial;
+                display: inline-block;
+                font-weight: 400;
+                white-space: nowrap;
+                vertical-align: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                border: 1px solid transparent;
+                padding: .375rem .75rem;
+                font-size: 1rem;
+                line-height: 1.5;
+                border-radius: .25rem;
+                transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+             }
+        </style>
+    </body>
+</html>
